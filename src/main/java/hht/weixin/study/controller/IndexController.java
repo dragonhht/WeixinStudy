@@ -1,6 +1,9 @@
 package hht.weixin.study.controller;
 
+import hht.weixin.study.model.MediaId;
+import hht.weixin.study.model.MediaMessage;
 import hht.weixin.study.model.TextMessage;
+import hht.weixin.study.model.VoiceMessage;
 import hht.weixin.study.utils.CheckUtils;
 import hht.weixin.study.utils.MessageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -50,17 +53,39 @@ public class IndexController {
         String toUserName = map.get("ToUserName");
         String fromUserName = map.get("FromUserName");
         String msgType = map.get("MsgType");
-        String content = map.get("Content");
 
         String message = null;
         if ("text".equals(msgType)) { // 判断是否为文本类型
+            String content = map.get("Content");
             TextMessage text = new TextMessage();
             text.setFromUserName(toUserName);
             text.setToUserName(fromUserName);
             text.setContent("发送的消息为： " + content);
             text.setCreateTime(System.currentTimeMillis());
             text.setMsgType("text");
-            message = MessageUtil.textMessageToXml(text);
+            message = MessageUtil.messageToXml(text);
+        }
+        if ("image".equals(msgType)) { // 消息为图片类型
+            String PicUrl = map.get("PicUrl");
+            log.info("图片路径为： " + PicUrl);
+            String MediaId = map.get("MediaId");
+            MediaMessage media = new MediaMessage();
+            media.setFromUserName(toUserName);
+            media.setToUserName(fromUserName);
+            media.setCreateTime(System.currentTimeMillis());
+            media.setMsgType("image");
+            media.setImage(new MediaId(MediaId));
+            message = MessageUtil.messageToXml(media);
+        }
+        if ("voice".equals(msgType)) { // 消息为语音
+            String MediaId = map.get("MediaId");
+            VoiceMessage voice = new VoiceMessage();
+            voice.setFromUserName(toUserName);
+            voice.setToUserName(fromUserName);
+            voice.setCreateTime(System.currentTimeMillis());
+            voice.setMsgType("voice");
+            voice.setVoice(new MediaId(MediaId));
+            message = MessageUtil.messageToXml(voice);
         }
         return message;
 

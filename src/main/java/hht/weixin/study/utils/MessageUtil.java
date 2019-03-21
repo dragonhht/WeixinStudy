@@ -1,6 +1,9 @@
 package hht.weixin.study.utils;
 
 import com.thoughtworks.xstream.XStream;
+import hht.weixin.study.model.MediaId;
+import hht.weixin.study.model.MediaMessage;
+import hht.weixin.study.model.Message;
 import hht.weixin.study.model.TextMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
@@ -49,14 +52,24 @@ public class MessageUtil {
     }
 
     /**
-     * 将文本消息对象转换为xml.
+     * 将消息对象转换为xml.
      * @param message
      * @return
      */
-    public static String textMessageToXml(TextMessage message) {
+    public static String messageToXml(Message message) {
         XStream xStream = new XStream();
         xStream.alias("xml", message.getClass());
         return xStream.toXML(message);
+    }
+
+    public static void main(String[] args) {
+        MediaMessage media = new MediaMessage();
+        media.setFromUserName("23");
+        media.setToUserName("34");
+        media.setCreateTime(System.currentTimeMillis());
+        media.setMsgType("image");
+        media.setImage(new MediaId("345"));
+        System.out.println(messageToXml(media));
     }
 
 }

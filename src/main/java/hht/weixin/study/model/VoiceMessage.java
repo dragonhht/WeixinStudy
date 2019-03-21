@@ -5,15 +5,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 文本消息model.
+ * .
  *
  * @author: huang
- * Date: 17-12-2
+ * @Date: 2019-3-21
  */
 @Getter
 @Setter
 @ToString
-public class TextMessage extends Message {
-    private String Content;
-    private String MsgId;
+public class VoiceMessage extends Message {
+    private MediaId Voice;
 }
