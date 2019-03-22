@@ -1,9 +1,6 @@
 package hht.weixin.study.controller;
 
-import hht.weixin.study.model.MediaId;
-import hht.weixin.study.model.MediaMessage;
-import hht.weixin.study.model.TextMessage;
-import hht.weixin.study.model.VoiceMessage;
+import hht.weixin.study.model.*;
 import hht.weixin.study.utils.CheckUtils;
 import hht.weixin.study.utils.MessageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +52,8 @@ public class IndexController {
         String msgType = map.get("MsgType");
 
         String message = null;
-        if ("text".equals(msgType)) { // 判断是否为文本类型
+        // 判断是否为文本类型
+        if ("text".equals(msgType)) {
             String content = map.get("Content");
             TextMessage text = new TextMessage();
             text.setFromUserName(toUserName);
@@ -65,7 +63,8 @@ public class IndexController {
             text.setMsgType("text");
             message = MessageUtil.messageToXml(text);
         }
-        if ("image".equals(msgType)) { // 消息为图片类型
+        // 消息为图片类型
+        if ("image".equals(msgType)) {
             String PicUrl = map.get("PicUrl");
             log.info("图片路径为： " + PicUrl);
             String MediaId = map.get("MediaId");
@@ -77,7 +76,8 @@ public class IndexController {
             media.setImage(new MediaId(MediaId));
             message = MessageUtil.messageToXml(media);
         }
-        if ("voice".equals(msgType)) { // 消息为语音
+        // 消息为语音
+        if ("voice".equals(msgType)) {
             String MediaId = map.get("MediaId");
             VoiceMessage voice = new VoiceMessage();
             voice.setFromUserName(toUserName);
@@ -86,6 +86,21 @@ public class IndexController {
             voice.setMsgType("voice");
             voice.setVoice(new MediaId(MediaId));
             message = MessageUtil.messageToXml(voice);
+        }
+        // 消息为视频
+        if ("video".equals(msgType)) {
+            String MediaId = map.get("MediaId");
+            VideoMessage video = new VideoMessage();
+            video.setFromUserName(toUserName);
+            video.setToUserName(fromUserName);
+            video.setCreateTime(System.currentTimeMillis());
+            video.setMsgType("video");
+            Video v = new Video();
+            v.setDescription("返回的视频描述");
+            v.setTitle("视频标题");
+            v.setMediaId(MediaId);
+            video.setVideo(v);
+            message = MessageUtil.messageToXml(video);
         }
         return message;
 
