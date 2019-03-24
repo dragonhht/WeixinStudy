@@ -102,6 +102,22 @@ public class IndexController {
             video.setVideo(v);
             message = MessageUtil.messageToXml(video);
         }
+        // 关注与取关事件
+        if ("event".equals(msgType)) {
+            String eventType = map.get("Event");
+            if ("subscribe".equals(eventType)) {
+                TextMessage text = new TextMessage();
+                text.setToUserName(fromUserName);
+                text.setFromUserName(toUserName);
+                text.setCreateTime(System.currentTimeMillis());
+                text.setMsgType("text");
+                text.setContent("感谢您的关注!!!");
+                message = MessageUtil.messageToXml(text);
+            }
+            if ("unsubscribe".equals(eventType)) {
+                log.info(fromUserName , "已取消关注");
+            }
+        }
         return message;
 
     }
